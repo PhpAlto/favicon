@@ -36,5 +36,6 @@ jobs:
         php: ['8.3', '8.4', '8.5']
     uses: phpalto/.github/.github/workflows/tests.yml@main
     with:
-      php-version: ${{ matrix.php }}  
+      php-version: ${{ matrix.php }}
+      php-extensions: imagick
       # phpunit-args: '--colors=never'
