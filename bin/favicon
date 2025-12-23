@@ -1,0 +1,40 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+/*
+ * This file is part of the ALTO library.
+ *
+ * © 2025–present Simon André
+ *
+ * For full copyright and license information, please see
+ * the LICENSE file distributed with this source code.
+ */
+
+use Alto\Favicon\Command\GenerateFaviconCommand;
+use Symfony\Component\Console\Application;
+
+$autoloadFiles = [
+    __DIR__.'/../vendor/autoload.php',
+    __DIR__.'/../../../autoload.php',
+];
+
+$autoloader = null;
+foreach ($autoloadFiles as $file) {
+    if (file_exists($file)) {
+        $autoloader = require $file;
+        break;
+    }
+}
+
+if (null === $autoloader) {
+    fwrite(STDERR, "Error: Autoload file not found.\n");
+    exit(1);
+}
+
+$application = new Application('Alto Favicon', '1.0.0');
+$application->addCommand(new GenerateFaviconCommand());
+$application->setDefaultCommand(GenerateFaviconCommand::NAME, true);
+
+exit($application->run());
