@@ -22,6 +22,8 @@ class FaviconGeneratorMinimalTest extends FaviconTestCase
 {
     public function testGenerateMinimalSet(): void
     {
+        $this->requireSvgRasterizer();
+
         $inputFile = $this->getFixturesDir().'/logo.svg';
         $outputDir = $this->getOutputDir().'/minimal_test';
 

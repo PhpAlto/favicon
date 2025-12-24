@@ -16,6 +16,7 @@ namespace Alto\Favicon\Rasterizer;
 use Alto\Favicon\Exception\RasterizerUnavailableException;
 use Alto\Favicon\Rasterizer\Adapter\AdapterInterface;
 use Alto\Favicon\Rasterizer\Adapter\ImagickCliAdapter;
+use Alto\Favicon\Rasterizer\Adapter\ImagickExtensionAdapter;
 use Alto\Favicon\Rasterizer\Adapter\InkscapeAdapter;
 use Alto\Favicon\Rasterizer\Adapter\RsvgAdapter;
 use Psr\Log\LoggerInterface;
@@ -43,6 +44,7 @@ final class SvgRasterizer implements RasterizerInterface
             new RsvgAdapter(),
             new InkscapeAdapter(),
             new ImagickCliAdapter(),
+            new ImagickExtensionAdapter(),
         ];
     }
 

@@ -24,6 +24,8 @@ class FaviconCommandTest extends FaviconTestCase
 {
     public function testGenerateFromSvg(): void
     {
+        $this->requireSvgRasterizer();
+
         $application = new Application();
         $application->addCommand(new GenerateFaviconCommand());
 

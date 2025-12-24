@@ -22,6 +22,8 @@ class FaviconGeneratorTest extends FaviconTestCase
 {
     public function testGenerateFromSvg(): void
     {
+        $this->requireSvgRasterizer();
+
         $inputFile = $this->getFixturesDir().'/logo.svg';
         $outputDir = $this->getOutputDir().'/svg_test';
         $this->cleanupDir($outputDir);
@@ -89,6 +91,8 @@ class FaviconGeneratorTest extends FaviconTestCase
 
     public function testSkipExistingFiles(): void
     {
+        $this->requireSvgRasterizer();
+
         $inputFile = $this->getFixturesDir().'/logo.svg';
         $outputDir = $this->getOutputDir().'/skip_test';
         $this->cleanupDir($outputDir);
@@ -118,6 +122,8 @@ class FaviconGeneratorTest extends FaviconTestCase
 
     public function testForceOverwrite(): void
     {
+        $this->requireSvgRasterizer();
+
         $inputFile = $this->getFixturesDir().'/logo.svg';
         $outputDir = $this->getOutputDir().'/force_test';
         $this->cleanupDir($outputDir);

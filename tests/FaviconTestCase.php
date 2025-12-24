@@ -13,6 +13,10 @@ declare(strict_types=1);
 
 namespace Alto\Favicon\Tests;
 
+use Alto\Favicon\Rasterizer\Adapter\ImagickCliAdapter;
+use Alto\Favicon\Rasterizer\Adapter\ImagickExtensionAdapter;
+use Alto\Favicon\Rasterizer\Adapter\InkscapeAdapter;
+use Alto\Favicon\Rasterizer\Adapter\RsvgAdapter;
 use PHPUnit\Framework\TestCase;
 
 abstract class FaviconTestCase extends TestCase
@@ -56,5 +60,23 @@ abstract class FaviconTestCase extends TestCase
     protected function tearDown(): void
     {
         // Optional: clean up output dir
+    }
+
+    protected function requireSvgRasterizer(): void
+    {
+        $adapters = [
+            new RsvgAdapter(),
+            new InkscapeAdapter(),
+            new ImagickCliAdapter(),
+            new ImagickExtensionAdapter(),
+        ];
+
+        foreach ($adapters as $adapter) {
+            if ($adapter->isAvailable()) {
+                return;
+            }
+        }
+
+        $this->markTestSkipped('No suitable SVG rasterizer found.');
     }
 }
