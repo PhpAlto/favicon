@@ -27,7 +27,7 @@ use Psr\Log\NullLogger;
  */
 final class PngRasterizer implements RasterizerInterface
 {
-    protected LoggerInterface $logger;
+    private LoggerInterface $logger;
 
     /** @var list<AdapterInterface> */
     private array $adapters;
