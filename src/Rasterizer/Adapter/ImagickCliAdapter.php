@@ -44,8 +44,10 @@ final class ImagickCliAdapter implements AdapterInterface
             throw new RasterizerUnavailableException('ImageMagick CLI (magick or convert) is not available.');
         }
 
+        $binary = $this->binary ?? throw new RasterizerUnavailableException('ImageMagick CLI (magick or convert) is not available.');
+
         (new Process([
-            $this->binary,
+            $binary,
             $source,
             '-background', 'none',
             '-resize', $size.'x'.$size,
