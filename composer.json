@@ -24,7 +24,12 @@
             "email": "smn.andre@gmail.com"
         }
     ],
-    "homepage": "https://github.com/altophp/favicon",
+    "homepage": "https://altophp.com/favicon",
+    "support": {
+        "docs": "https://altophp.com/favicon",
+        "issues": "https://github.com/altophp/favicon/issues",
+        "source": "https://github.com/altophp/favicon"
+    },
     "funding": [
         {
             "type": "github",
