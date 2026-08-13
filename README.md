@@ -1,168 +1,98 @@
-# Alto Favicon
+# ALTO Favicon
 
-A modern, efficient PHP library and CLI tool to generate a complete favicon set from a single SVG or PNG source.
+Generate a focused, modern favicon set from one SVG or PNG source.
 
-It follows the [modern best practices (2025)](https://evilmartians.com/chronicles/how-to-favicon-in-2021-six-files-that-fit-most-needs) to generate a minimal yet robust set of icons for all browsers and devices.
+&nbsp; ![PHP Version](https://img.shields.io/badge/PHP-8.3%2B-00B7FF?logoColor=00B7FF&labelColor=050608)
+&nbsp; ![CI](https://img.shields.io/github/actions/workflow/status/altophp/favicon/CI.yml?branch=main&label=Tests&labelColor=050608&color=00B7FF)
+&nbsp; [![Packagist](https://img.shields.io/packagist/v/alto/favicon?label=Packagist&labelColor=050608&color=00B7FF)](https://packagist.org/packages/alto/favicon)
+&nbsp; ![License](https://img.shields.io/github/license/altophp/favicon?label=License&labelColor=050608&color=00B7FF)
+&nbsp; [![GitHub Sponsors](https://img.shields.io/github/sponsors/smnandre?logo=githubsponsors&logoColor=00B7FF&label=%20Sponsor&labelColor=050608&color=00B7FF)](https://github.com/sponsors/smnandre)
 
-## Features
+ALTO Favicon produces the small set of files current browsers and devices need,
+plus the exact HTML tags required to use them. The CLI and PHP API share the
+same options, preserve SVG input for modern browsers, and select an available
+rasterizer automatically.
 
-- **Minimal Output**: Generates only the necessary files to cover all modern use cases.
-- **SVG Support**: Preserves your vector logo for modern browsers (`icon.svg`).
-- **Legacy Support**: Generates a 32x32 `favicon.ico` for older browsers.
-- **Mobile Ready**: Generates `apple-touch-icon.png` and Android icons (`icon-192.png`, `icon-512.png`).
-- **PWA Ready**: Automatically generates a `manifest.webmanifest`.
-- **Search Friendly**: Optionally generates a 48x48 PNG for Google Search results.
-- **HTML Snippet**: Outputs the exact HTML tags you need to include in your `<head>`.
-- **Flexible Rasterization**: Supports multiple adapters for image processing:
-  - SVG: `rsvg-convert`, `inkscape`, or `imagemagick` (CLI)
-  - PNG: `ext-imagick` or `ext-gd`
+```bash
+vendor/bin/favicon assets/logo.svg --output public/favicons
+```
 
-## Requirements
-
-- PHP 8.3 or higher
-- For PNG processing: `ext-imagick` (recommended) OR `ext-gd`
-- For SVG input, one of the following must be installed on your system:
-  - `rsvg-convert` (part of `librsvg`, recommended)
-  - `inkscape`
-  - `imagemagick` (`magick` or `convert`)
+The default result includes `icon.svg`, `favicon.ico`,
+`apple-touch-icon.png`, and `favicon.html`. Optional flags add a Web App
+Manifest, Android icons, a maskable icon, and a Google Search PNG.
 
 ## Installation
+
+Install ALTO Favicon with Composer:
 
 ```bash
 composer require alto/favicon
 ```
 
-## Usage
+ALTO Favicon requires PHP 8.3 or later. SVG input needs `rsvg-convert`,
+Inkscape, ImageMagick CLI, or the Imagick extension. PNG input needs Imagick or
+GD. Composer installs the PHP package dependencies automatically.
 
-### CLI
+## Quick Start
 
-Run the tool using the binary:
-
-```bash
-vendor/bin/favicon path/to/logo.svg
-```
-
-### Programmatic Usage
-
-You can use the `FaviconGenerator` class directly in your PHP application (e.g., in a CMS, build script, or controller).
-
-```php
-use Alto\Favicon\Generator\FaviconGenerator;
-use Alto\Favicon\Options\FaviconOptionsBuilder;
-
-// 1. Configure options
-$options = (new FaviconOptionsBuilder(
-    inputFile: 'assets/logo.svg',
-    outputDir: 'public/favicons'
-))
-    ->publicPath('/favicons')
-    ->appName('My App')
-    ->themeColor('#0b0b0b')
-    ->build();
-
-// 2. Generate
-$generator = new FaviconGenerator();
-$report = $generator->generate($options);
-
-// 3. Use the result
-echo "Generated " . count($report->files) . " files.\n";
-echo "HTML Snippet:\n" . $report->htmlSnippet;
-```
-
-#### `FaviconOptionsBuilder` API
-
-| Method | Description | Default |
-|--------|-------------|---------|
-| `__construct(string $inputFile, string $outputDir)` | Initialize with input file and output directory. | - |
-| `publicPath(string $path)` | Set the public URL prefix for generated files. | `/` |
-| `appName(string $name)` | Set the application name for the manifest. | `App` |
-| `themeColor(string $color)` | Set the theme color (meta tag & manifest). | `#0b0b0b` |
-| `backgroundColor(string $color)` | Set the background color (manifest). | `#ffffff` |
-| `generateManifest(bool $generate)` | Enable/disable manifest generation. | `false` |
-| `generateSearchPng48(bool $generate)` | Enable/disable 48x48 PNG generation. | `false` |
-| `force(bool $force)` | Enable/disable overwriting existing files. | `false` |
-| `build(): FaviconOptions` | Build the options object. | - |
-
-#### `GenerationReport` Properties
-
-The `generate()` method returns a `GenerationReport` object with the following properties:
-
-- `outputDir` (string): The directory where files were written.
-- `publicPath` (string): The public URL prefix used.
-- `files` (array<string, int>): Map of generated filenames to their size in bytes.
-- `htmlSnippet` (string): The HTML tags to include in your `<head>`.
-- `manifestFile` (?string): The name of the manifest file (if generated).
-- `totalBytes()` (int): Helper method to get total size of generated files.
-
-### Options (CLI)
-
-| Option | Description | Default |
-|--------|-------------|---------|
-| `--output`, `-o` | Output directory for generated files | `public` |
-| `--public-path` | Public path prefix used in HTML/manifest | `/` |
-| `--app-name` | Application name used in the manifest | `App` |
-| `--theme-color` | Theme color for browser UI and manifest | `#0b0b0b` |
-| `--background-color` | Background color for the manifest | `#ffffff` |
-| `--manifest` | Generate `manifest.webmanifest` and Android icons | `false` |
-| `--search-png` | Generate the 48x48 PNG favicon | `false` |
-| `--force`, `-f` | Overwrite existing files | `false` |
-
-### Examples
-
-**Basic usage (Minimal set):**
+Generate the default set from an SVG:
 
 ```bash
-vendor/bin/favicon assets/logo.svg
+vendor/bin/favicon assets/logo.svg --output public/favicons
 ```
 
-**Full set with Manifest and Search Icon:**
+Then copy the generated contents of `public/favicons/favicon.html` into the
+document `<head>`.
 
-```bash
-vendor/bin/favicon assets/logo.svg --manifest --search-png
-```
-
-**Customizing output and colors:**
+Add a manifest and a dedicated Google Search icon when needed:
 
 ```bash
 vendor/bin/favicon assets/logo.svg \
-    --output public/assets/favicons \
-    --public-path /assets/favicons \
-    --app-name "My Awesome App" \
-    --theme-color "#3b82f6"
+    --output public/favicons \
+    --public-path /favicons \
+    --app-name "My App" \
+    --manifest \
+    --search-png
 ```
 
-**Using a PNG source (if you don't have SVG):**
+## Documentation
+
+| Guide | Contents |
+| --- | --- |
+| [Documentation index](docs/index.md) | Browse the complete guide set |
+| [Getting started](docs/getting-started.md) | Generate and install the first favicon set |
+| [CLI](docs/cli.md) | Commands, flags, and examples |
+| [PHP API](docs/php-api.md) | Programmatic generation and reports |
+| [Configuration](docs/configuration.md) | Options, defaults, and overwrite behavior |
+| [Rasterizers](docs/rasterizers.md) | SVG and PNG adapter selection |
+| [Generated files](docs/generated-files.md) | Default and optional outputs |
+| [Errors](docs/errors.md) | Input and rasterization failures |
+
+## Contributing
+
+Contributions of all kinds are welcome. Visit the
+[project on GitHub](https://github.com/altophp/favicon) to
+[report a bug](https://github.com/altophp/favicon/issues/new),
+[suggest a feature](https://github.com/altophp/favicon/issues/new), or
+[open a pull request](https://github.com/altophp/favicon/pulls).
+
+Before submitting code, run:
 
 ```bash
-vendor/bin/favicon assets/logo.png
+# Runs PHP CS Fixer, PHPStan, and PHPUnit
+composer qa
 ```
-*Note: When using PNG input, `icon.svg` will not be generated, and 16x16/32x32 PNGs will be used as fallbacks.*
 
-## Generated Files
+## Support
 
-The tool generates the following structure in your output directory:
+ALTO Favicon is open source. You can support its continued development through
+[GitHub Sponsors](https://github.com/sponsors/smnandre).
 
-- `favicon.ico` (Legacy support)
-- `icon.svg` (Modern browsers)
-- `apple-touch-icon.png` (iOS)
-- `favicon.html` (HTML snippet to include)
-
-**Optional files (with `--manifest` and `--search-png`):**
-
-- `icon-192.png` (Android)
-- `icon-512.png` (Android)
-- `icon-maskable.png` (Android maskable icon)
-- `manifest.webmanifest` (Web App Manifest)
-- `favicon-48x48.png` (Google Search)
-
-## Testing
-
-To run the test suite:
-
-```bash
-composer test
-```
+Sharing this package with others or
+[starring it on GitHub](https://github.com/altophp/favicon) is also much
+appreciated.
 
 ## License
 
-This project is licensed under the MIT License.
+ALTO Favicon is released by [ALTO PHP](https://altophp.com) under the
+[MIT License](LICENSE).

@@ -25,10 +25,27 @@ use Symfony\Component\Process\Process;
 final class InkscapeAdapter implements AdapterInterface
 {
     private ?bool $available = null;
+    private ?string $binary = null;
 
     public function isAvailable(): bool
     {
-        return $this->available ??= null !== (new ExecutableFinder())->find('inkscape');
+        if (null !== $this->available) {
+            return $this->available;
+        }
+
+        $this->binary = (new ExecutableFinder())->find('inkscape');
+        if (null === $this->binary) {
+            return $this->available = false;
+        }
+
+        try {
+            $process = new Process([$this->binary, '--version']);
+            $process->setTimeout(5);
+
+            return $this->available = 0 === $process->run();
+        } catch (\Throwable) {
+            return $this->available = false;
+        }
     }
 
     public function run(string $source, int $size, string $destination): void
@@ -38,7 +55,7 @@ final class InkscapeAdapter implements AdapterInterface
         }
 
         (new Process([
-            'inkscape',
+            $this->binary ?? 'inkscape',
             $source,
             '--export-type=png',
             '--export-filename='.$destination,
